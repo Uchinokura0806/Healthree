@@ -1,13 +1,8 @@
-'use client'
-
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-
-// UHT/GHT ペア情報（自身の Dexscreener のペアアドレスに書き換えてください）
-const DEX_API_URL = 'https://api.dexscreener.com/latest/dex/pairs/polygon/YOUR_PAIR_ADDRESS'
 
 // 装備の三部位データ型
 type CleaningOrRepair = { top: string; bottom: string; shoes: string }
@@ -23,25 +18,7 @@ export default function EfficiencyCalculator() {
   const [repair, setRepair] = useState<CleaningOrRepair>({ ...initialState })
 
   // リアルレートを取得する
-  const [rate, setRate] = useState<number>(3.06088)
-  const [loadingRate, setLoadingRate] = useState<boolean>(true)
-
-  useEffect(() => {
-    async function fetchRate() {
-      try {
-        const res = await fetch(DEX_API_URL)
-        const data = await res.json()
-        const ghtPrice = parseFloat(data.pair.token1Price) // GHT
-        const uhtPrice = parseFloat(data.pair.token0Price) // UHT
-        if (ghtPrice > 0) setRate(uhtPrice / ghtPrice)
-      } catch (e) {
-        console.error('レート取得失敗', e)
-      } finally {
-        setLoadingRate(false)
-      }
-    }
-    fetchRate()
-  }, [])
+  const rate = 3.06088
 
   // 値変換
   const uhtNumber = parseFloat(uht) || 0
@@ -106,14 +83,7 @@ export default function EfficiencyCalculator() {
       <h1 className="text-4xl font-bold text-center text-blue-700 mb-8">
         獲得効率 試算ツール
       </h1>
-
-      {loadingRate ? (
-        <p className="text-center text-sm text-gray-500">レート取得中…</p>
-	  ) : (
-	    <p className="text-center text-sm text-gray-700">
-    	  1 GHT = {rate.toFixed(4)} UHT
-        </p>
-      )}
+	    <p className="text-center text-sm text-gray-700">1 GHT = {rate.toFixed(4)} UHT</p>
 
       {/* UHT入力 */}
       <Card className="rounded-2xl shadow-sm">
