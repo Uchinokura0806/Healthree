@@ -81,9 +81,9 @@ export default function EfficiencyCalculator() {
   return (
     <div className="w-full sm:max-w-2xl mx-auto p-4 sm:p-6 space-y-6">
       <h1 className="text-4xl font-bold text-center text-blue-700 mb-8">
-        獲得効率 試算ツール
+        獲得効率シミュレーター
       </h1>
-	    <p className="text-center text-sm text-gray-700">1 GHT = {rate.toFixed(4)} UHT</p>
+	    <p className="text-center text-sm text-gray-700">1 GHT = {rate.toFixed(4)} UHT（最終更新日: 2025/7/14）</p>
 
       {/* UHT入力 */}
       <Card className="rounded-2xl shadow-sm">
