@@ -1,8 +1,15 @@
+// pages/efficiencyCalculator.tsx
 import { useState } from 'react'
+import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Home } from 'lucide-react'
+
+// ===== 定数 =====
+const RATE_GHT_TO_UHT = 3.06549
+const LAST_UPDATED = '2025/07/14'
 
 // 装備の三部位データ型
 type CleaningOrRepair = { top: string; bottom: string; shoes: string }
@@ -12,44 +19,43 @@ export default function EfficiencyCalculator() {
   const keys: (keyof CleaningOrRepair)[] = ['top', 'bottom', 'shoes']
 
   // 入力ステート
-  const [uht, setUht] = useState<string>('')
-  const [energy, setEnergy] = useState<string>('')
+  const [uht, setUht] = useState('')
+  const [energy, setEnergy] = useState('')
   const [cleaning, setCleaning] = useState<CleaningOrRepair>({ ...initialState })
   const [repair, setRepair] = useState<CleaningOrRepair>({ ...initialState })
 
-  // リアルレートを取得する
-  const rate = 3.06549
-
-  // 値変換
+  // 数値変換
   const uhtNumber = parseFloat(uht) || 0
   const energyNum = parseFloat(energy) || 0
 
   // コスト計算
-  const totalCleaning = Object.values(cleaning)
-    .reduce((s, v) => s + (parseFloat(v) || 0), 0)
+  const totalCleaning = Object.values(cleaning).reduce(
+    (s, v) => s + (parseFloat(v) || 0),
+    0
+  )
 
-  const totalRepairGHT = Object.values(repair)
-    .reduce((s, v) => s + (parseFloat(v) || 0), 0)
+  const totalRepairGHT = Object.values(repair).reduce(
+    (s, v) => s + (parseFloat(v) || 0),
+    0
+  )
 
   const repairDivisor = Math.max(5, Math.ceil(energyNum / 5) * 5)
-  const totalRepairCost = energyNum > 0
-    ? totalRepairGHT * energyNum / repairDivisor * rate
-    : 0
+  const totalRepairCost =
+    energyNum > 0 ? (totalRepairGHT * energyNum) / repairDivisor * RATE_GHT_TO_UHT : 0
 
   const totalCost = totalCleaning + totalRepairCost
   const rawEfficiency = uhtNumber > 0 ? (1 - totalCost / uhtNumber) * 100 : 0
   const efficiency = rawEfficiency.toFixed(2)
 
   const efficiencyColor =
-    rawEfficiency >= 80 ? 'text-green-600'
-    : rawEfficiency >= 70 ? 'text-yellow-600'
-    : 'text-red-600'
+    rawEfficiency >= 80
+      ? 'text-green-600'
+      : rawEfficiency >= 70
+      ? 'text-yellow-600'
+      : 'text-red-600'
 
   const canShowEfficiency =
-    uhtNumber >= 0 &&
-    energyNum > 0 &&
-    rawEfficiency >= 0 &&
-    rawEfficiency <= 100
+    uhtNumber >= 0 && energyNum > 0 && rawEfficiency >= 0 && rawEfficiency <= 100
 
   const errorMessage =
     uht === ''
@@ -80,12 +86,27 @@ export default function EfficiencyCalculator() {
 
   return (
     <div className="w-full sm:max-w-2xl mx-auto p-4 sm:p-6 space-y-6">
-      <h1 className="text-4xl font-bold text-center text-blue-700 mb-8">
+      {/* ===== タイトル ===== */}
+      <h1 className="text-3xl sm:text-4xl font-bold text-blue-700 text-center">
         獲得効率シミュレーター
       </h1>
-	    <p className="text-center text-sm text-gray-700">1 GHT = {rate.toFixed(4)} UHT（最終更新日: 2025/7/14）</p>
 
-      {/* UHT入力 */}
+      {/* ===== ホームボタン ===== */}
+      <div className="flex justify-end">
+        <Link href="/" passHref>
+          <Button variant="ghost" className="mt-2 flex items-center gap-1 w-full sm:w-auto">
+            <Home className="h-5 w-5" />
+            ホームへ
+          </Button>
+        </Link>
+      </div>
+
+      {/* ===== レート表示 ===== */}
+      <p className="text-center text-xs sm:text-sm text-gray-700">
+        1 GHT = {RATE_GHT_TO_UHT.toFixed(4)} UHT（最終更新日: {LAST_UPDATED}）
+      </p>
+
+      {/* ===== UHT入力 ===== */}
       <Card className="rounded-2xl shadow-sm">
         <CardContent className="p-6 space-y-2">
           <Label htmlFor="uht" className="text-lg font-semibold text-gray-700">獲得UHT</Label>
@@ -111,7 +132,7 @@ export default function EfficiencyCalculator() {
         </CardContent>
       </Card>
 
-      {/* Energy入力 */}
+      {/* ===== Energy入力 ===== */}
       <Card className="rounded-2xl shadow-sm">
         <CardContent className="p-6 space-y-2">
           <Label htmlFor="energy" className="text-lg font-semibold text-gray-700">消費エナジー</Label>
@@ -137,7 +158,7 @@ export default function EfficiencyCalculator() {
         </CardContent>
       </Card>
 
-      {/* Cleaning */}
+      {/* ===== Cleaning ===== */}
       <Card className="rounded-2xl shadow-sm">
         <CardContent className="p-6 space-y-4">
           <h2 className="text-lg font-semibold text-gray-700 border-b pb-2">クリーニングコスト</h2>
@@ -159,7 +180,7 @@ export default function EfficiencyCalculator() {
         </CardContent>
       </Card>
 
-      {/* Repair */}
+      {/* ===== Repair ===== */}
       <Card className="rounded-2xl shadow-sm">
         <CardContent className="p-6 space-y-4">
           <h2 className="text-lg font-semibold text-gray-700 border-b pb-2">リペアコスト</h2>
@@ -181,7 +202,7 @@ export default function EfficiencyCalculator() {
         </CardContent>
       </Card>
 
-      {/* 結果表示 */}
+      {/* ===== 結果表示 ===== */}
       <Card className="rounded-2xl shadow-md border">
         <CardContent className="p-6 text-center space-y-4">
           <p className="text-lg text-gray-700">
@@ -203,7 +224,7 @@ export default function EfficiencyCalculator() {
         </CardContent>
       </Card>
 
-      {/* リセット */}
+      {/* ===== リセット ===== */}
       <div className="text-center">
         <Button variant="outline" onClick={resetAll} className="mt-2 w-full sm:w-auto">
           リセット
