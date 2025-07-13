@@ -18,7 +18,7 @@ export default function EfficiencyCalculator() {
   const [repair, setRepair] = useState<CleaningOrRepair>({ ...initialState })
 
   // リアルレートを取得する
-  const rate = 3.06088
+  const rate = 3.06549
 
   // 値変換
   const uhtNumber = parseFloat(uht) || 0
