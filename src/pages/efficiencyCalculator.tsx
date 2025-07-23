@@ -1,61 +1,58 @@
 // pages/efficiencyCalculator.tsx
-import { useState } from 'react'
-import Link from 'next/link'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Home } from 'lucide-react'
+import { useState } from 'react';
+import Link from 'next/link';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Home } from 'lucide-react';
 
 // ===== 定数 =====
-const RATE_GHT_TO_UHT = 3.06549
-const LAST_UPDATED = '2025/07/14'
+const RATE_GHT_TO_UHT = 3.08689;
+const LAST_UPDATED = '2025/07/24';
 
 // 装備の三部位データ型
-type CleaningOrRepair = { top: string; bottom: string; shoes: string }
+type CleaningOrRepair = { top: string; bottom: string; shoes: string };
 
 export default function EfficiencyCalculator() {
-  const initialState: CleaningOrRepair = { top: '', bottom: '', shoes: '' }
-  const keys: (keyof CleaningOrRepair)[] = ['top', 'bottom', 'shoes']
+  const initialState: CleaningOrRepair = { top: '', bottom: '', shoes: '' };
+  const keys: (keyof CleaningOrRepair)[] = ['top', 'bottom', 'shoes'];
 
-  // 入力ステート
-  const [uht, setUht] = useState('')
-  const [energy, setEnergy] = useState('')
-  const [cleaning, setCleaning] = useState<CleaningOrRepair>({ ...initialState })
-  const [repair, setRepair] = useState<CleaningOrRepair>({ ...initialState })
+  const [uht, setUht] = useState('');
+  const [energy, setEnergy] = useState('');
+  const [cleaning, setCleaning] = useState<CleaningOrRepair>({ ...initialState });
+  const [repair, setRepair] = useState<CleaningOrRepair>({ ...initialState });
 
-  // 数値変換
-  const uhtNumber = parseFloat(uht) || 0
-  const energyNum = parseFloat(energy) || 0
+  const uhtNumber = parseFloat(uht) || 0;
+  const energyNum = parseFloat(energy) || 0;
 
-  // コスト計算
   const totalCleaning = Object.values(cleaning).reduce(
     (s, v) => s + (parseFloat(v) || 0),
     0
-  )
+  );
 
   const totalRepairGHT = Object.values(repair).reduce(
     (s, v) => s + (parseFloat(v) || 0),
     0
-  )
+  );
 
-  const repairDivisor = Math.max(5, Math.ceil(energyNum / 5) * 5)
+  const repairDivisor = Math.max(5, Math.ceil(energyNum / 5) * 5);
   const totalRepairCost =
-    energyNum > 0 ? (totalRepairGHT * energyNum) / repairDivisor * RATE_GHT_TO_UHT : 0
+    energyNum > 0 ? (totalRepairGHT * energyNum) / repairDivisor * RATE_GHT_TO_UHT : 0;
 
-  const totalCost = totalCleaning + totalRepairCost
-  const rawEfficiency = uhtNumber > 0 ? (1 - totalCost / uhtNumber) * 100 : 0
-  const efficiency = rawEfficiency.toFixed(2)
+  const totalCost = totalCleaning + totalRepairCost;
+  const rawEfficiency = uhtNumber > 0 ? (1 - totalCost / uhtNumber) * 100 : 0;
+  const efficiency = rawEfficiency.toFixed(2);
 
   const efficiencyColor =
     rawEfficiency >= 80
       ? 'text-green-600'
       : rawEfficiency >= 70
       ? 'text-yellow-600'
-      : 'text-red-600'
+      : 'text-red-600';
 
   const canShowEfficiency =
-    uhtNumber >= 0 && energyNum > 0 && rawEfficiency >= 0 && rawEfficiency <= 100
+    uhtNumber >= 0 && energyNum > 0 && rawEfficiency >= 0 && rawEfficiency <= 100;
 
   const errorMessage =
     uht === ''
@@ -64,34 +61,32 @@ export default function EfficiencyCalculator() {
       ? '消費エナジーを入力してください'
       : rawEfficiency < 0
       ? 'コストが獲得UHTを上回っています'
-      : ''
+      : '';
 
   const inputClass = (hasError: boolean) =>
-    `flex-1 ${hasError ? 'ring-1 ring-red-500' : ''}`
+    `flex-1 ${hasError ? 'ring-1 ring-red-500' : ''}`;
 
   const handleValChange = (
     setter: React.Dispatch<React.SetStateAction<CleaningOrRepair>>,
     field: keyof CleaningOrRepair
   ) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    const v = e.target.value
-    if (v === '' || parseFloat(v) >= 0) setter(prev => ({ ...prev, [field]: v }))
-  }
+    const v = e.target.value;
+    if (v === '' || parseFloat(v) >= 0) setter(prev => ({ ...prev, [field]: v }));
+  };
 
   const resetAll = () => {
-    setUht('')
-    setEnergy('')
-    setCleaning({ ...initialState })
-    setRepair({ ...initialState })
-  }
+    setUht('');
+    setEnergy('');
+    setCleaning({ ...initialState });
+    setRepair({ ...initialState });
+  };
 
   return (
     <div className="w-full sm:max-w-2xl mx-auto p-4 sm:p-6 space-y-6">
-      {/* ===== タイトル ===== */}
       <h1 className="text-3xl sm:text-4xl font-bold text-blue-700 text-center">
         獲得効率シミュレーター
       </h1>
 
-      {/* ===== ホームボタン ===== */}
       <div className="flex justify-end">
         <Link href="/" passHref>
           <Button variant="ghost" className="mt-2 flex items-center gap-1 w-full sm:w-auto">
@@ -101,12 +96,10 @@ export default function EfficiencyCalculator() {
         </Link>
       </div>
 
-      {/* ===== レート表示 ===== */}
       <p className="text-center text-xs sm:text-sm text-gray-700">
         1 GHT = {RATE_GHT_TO_UHT.toFixed(4)} UHT（最終更新日: {LAST_UPDATED}）
       </p>
 
-      {/* ===== UHT入力 ===== */}
       <Card className="rounded-2xl shadow-sm">
         <CardContent className="p-6 space-y-2">
           <Label htmlFor="uht" className="text-lg font-semibold text-gray-700">獲得UHT</Label>
@@ -118,8 +111,8 @@ export default function EfficiencyCalculator() {
               step="0.1"
               value={uht}
               onChange={e => {
-                const v = e.target.value
-                if (v === '' || parseFloat(v) >= 0) setUht(v)
+                const v = e.target.value;
+                if (v === '' || parseFloat(v) >= 0) setUht(v);
               }}
               placeholder="0"
               className={inputClass(uht === '' || uhtNumber === 0)}
@@ -132,7 +125,6 @@ export default function EfficiencyCalculator() {
         </CardContent>
       </Card>
 
-      {/* ===== Energy入力 ===== */}
       <Card className="rounded-2xl shadow-sm">
         <CardContent className="p-6 space-y-2">
           <Label htmlFor="energy" className="text-lg font-semibold text-gray-700">消費エナジー</Label>
@@ -144,8 +136,8 @@ export default function EfficiencyCalculator() {
               step="1"
               value={energy}
               onChange={e => {
-                const v = e.target.value
-                if (v === '' || parseFloat(v) >= 0) setEnergy(v)
+                const v = e.target.value;
+                if (v === '' || parseFloat(v) >= 0) setEnergy(v);
               }}
               placeholder="0"
               className={inputClass(energy === '' || energyNum === 0)}
@@ -158,7 +150,6 @@ export default function EfficiencyCalculator() {
         </CardContent>
       </Card>
 
-      {/* ===== Cleaning ===== */}
       <Card className="rounded-2xl shadow-sm">
         <CardContent className="p-6 space-y-4">
           <h2 className="text-lg font-semibold text-gray-700 border-b pb-2">クリーニングコスト</h2>
@@ -180,7 +171,6 @@ export default function EfficiencyCalculator() {
         </CardContent>
       </Card>
 
-      {/* ===== Repair ===== */}
       <Card className="rounded-2xl shadow-sm">
         <CardContent className="p-6 space-y-4">
           <h2 className="text-lg font-semibold text-gray-700 border-b pb-2">リペアコスト</h2>
@@ -202,7 +192,6 @@ export default function EfficiencyCalculator() {
         </CardContent>
       </Card>
 
-      {/* ===== 結果表示 ===== */}
       <Card className="rounded-2xl shadow-md border">
         <CardContent className="p-6 text-center space-y-4">
           <p className="text-lg text-gray-700">
@@ -224,12 +213,11 @@ export default function EfficiencyCalculator() {
         </CardContent>
       </Card>
 
-      {/* ===== リセット ===== */}
       <div className="text-center">
         <Button variant="outline" onClick={resetAll} className="mt-2 w-full sm:w-auto">
           リセット
         </Button>
       </div>
     </div>
-  )
+  );
 }
