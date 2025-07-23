@@ -73,8 +73,8 @@ export default function BenefitUHTSwap() {
 
   return (
     <div className="w-full sm:max-w-2xl mx-auto p-4 sm:p-6 space-y-6">
-      <h1 className="text-3xl sm:text-4xl font-bold text-blue-700 text-center">
-        Benefit ⇔ UHT シミュレーター
+      <h1 className="text-4xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
+        Benefit ⇔ UHT
       </h1>
 
       <div className="flex justify-end">
@@ -90,7 +90,7 @@ export default function BenefitUHTSwap() {
         ※歩き時のデータを元に作成したものです。スピードによって獲得量は変動しますので、参考程度に。
       </p>
 
-      <Card className="max-w-md mx-auto p-6 space-y-6">
+      <Card className="p-8 space-y-8 border border-gray-200 shadow-xl rounded-2xl bg-white">
         <CardContent className="space-y-4">
           {isBenefitOnTop ? benefitField : uhtField}
 
@@ -103,7 +103,7 @@ export default function BenefitUHTSwap() {
           {isBenefitOnTop ? uhtField : benefitField}
 
           <div className="flex items-center justify-center py-1">
-            <Button variant="secondary" onClick={reset}>
+            <Button variant="outline" onClick={reset} className="w-32 border-gray-400 text-gray-600 hover:bg-gray-100">
               リセット
             </Button>
           </div>
