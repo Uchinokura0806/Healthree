@@ -83,8 +83,8 @@ export default function EfficiencyCalculator() {
 
   return (
     <div className="w-full sm:max-w-2xl mx-auto p-4 sm:p-6 space-y-6">
-      <h1 className="text-3xl sm:text-4xl font-bold text-blue-700 text-center">
-        獲得効率シミュレーター
+      <h1 className="text-4xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
+        獲得効率
       </h1>
 
       <div className="flex justify-end">
@@ -100,7 +100,7 @@ export default function EfficiencyCalculator() {
         1 GHT = {RATE_GHT_TO_UHT.toFixed(4)} UHT（最終更新日: {LAST_UPDATED}）
       </p>
 
-      <Card className="rounded-2xl shadow-sm">
+      <Card className="p-8 space-y-8 border border-gray-200 shadow-xl rounded-2xl bg-white">
         <CardContent className="p-6 space-y-2">
           <Label htmlFor="uht" className="text-lg font-semibold text-gray-700">獲得UHT</Label>
           <div className="flex items-center gap-2 sm:gap-4">
@@ -125,7 +125,7 @@ export default function EfficiencyCalculator() {
         </CardContent>
       </Card>
 
-      <Card className="rounded-2xl shadow-sm">
+      <Card className="p-8 space-y-8 border border-gray-200 shadow-xl rounded-2xl bg-white">
         <CardContent className="p-6 space-y-2">
           <Label htmlFor="energy" className="text-lg font-semibold text-gray-700">消費エナジー</Label>
           <div className="flex items-center gap-2 sm:gap-4">
@@ -150,7 +150,7 @@ export default function EfficiencyCalculator() {
         </CardContent>
       </Card>
 
-      <Card className="rounded-2xl shadow-sm">
+      <Card className="p-8 space-y-8 border border-gray-200 shadow-xl rounded-2xl bg-white">
         <CardContent className="p-6 space-y-4">
           <h2 className="text-lg font-semibold text-gray-700 border-b pb-2">クリーニングコスト</h2>
           {keys.map(item => (
@@ -171,7 +171,7 @@ export default function EfficiencyCalculator() {
         </CardContent>
       </Card>
 
-      <Card className="rounded-2xl shadow-sm">
+      <Card className="p-8 space-y-8 border border-gray-200 shadow-xl rounded-2xl bg-white">
         <CardContent className="p-6 space-y-4">
           <h2 className="text-lg font-semibold text-gray-700 border-b pb-2">リペアコスト</h2>
           {keys.map(item => (
@@ -192,7 +192,7 @@ export default function EfficiencyCalculator() {
         </CardContent>
       </Card>
 
-      <Card className="rounded-2xl shadow-md border">
+      <Card className="p-8 space-y-8 border border-gray-200 shadow-xl rounded-2xl bg-white">
         <CardContent className="p-6 text-center space-y-4">
           <p className="text-lg text-gray-700">
             総コスト：<span className="font-semibold">
@@ -214,7 +214,7 @@ export default function EfficiencyCalculator() {
       </Card>
 
       <div className="text-center">
-        <Button variant="outline" onClick={resetAll} className="mt-2 w-full sm:w-auto">
+        <Button variant="outline" onClick={resetAll} className="w-32 border-gray-400 text-gray-600 hover:bg-gray-100">
           リセット
         </Button>
       </div>
